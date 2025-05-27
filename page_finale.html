@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mot Final</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            padding-top: 50px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+        .letter-box {
+            width: 50px;
+            height: 50px;
+            font-size: 2em;
+            margin: 5px;
+            text-align: center;
+            display: inline-block;
+            border: 2px solid #2c3e50;
+            border-radius: 5px;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 2em;
+        }
+        .emoji {
+            font-size: 3em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Complétez le mot mystère à l’aide des lettres récoltées</h1>
+    <form id="finalForm">
+<input type="text" maxlength="1" class="letter-box" id="letter0" required>
+<input type="text" maxlength="1" class="letter-box" id="letter1" required>
+<input type="text" maxlength="1" class="letter-box" id="letter2" required>
+<input type="text" maxlength="1" class="letter-box" id="letter3" required>
+<input type="text" maxlength="1" class="letter-box" id="letter4" required>
+<input type="text" maxlength="1" class="letter-box" id="letter5" required>
+<input type="text" maxlength="1" class="letter-box" id="letter6" required>
+<input type="text" maxlength="1" class="letter-box" id="letter7" required>
+
+        <br><br>
+        <button type="submit">Valider</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        const form = document.getElementById('finalForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let inputWord = '';
+            inputWord += document.getElementById('letter0').value.toUpperCase();
+            inputWord += document.getElementById('letter1').value.toUpperCase();
+            inputWord += document.getElementById('letter2').value.toUpperCase();
+            inputWord += document.getElementById('letter3').value.toUpperCase();
+            inputWord += document.getElementById('letter4').value.toUpperCase();
+            inputWord += document.getElementById('letter5').value.toUpperCase();
+            inputWord += document.getElementById('letter6').value.toUpperCase();
+            inputWord += document.getElementById('letter7').value.toUpperCase();
+
+            const result = document.getElementById('result');
+            if (inputWord === 'APERITIF') {
+                result.innerHTML = "🎉 Bravo ! C’est l’heure de l’<strong>APÉRITIF</strong> ! 🥳🍹🍕";
+            } else {
+                result.innerHTML = "❌ Oups ! Ce n’est pas le bon mot... 🤔🥴";
+            }
+        });
+    </script>
+</body>
+</html>

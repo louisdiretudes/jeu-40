@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Equipe1 - Mot mystère</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            background: #f0f0f0;
+        }
+        .letterInput {
+            font-size: 1.5em;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            margin: 2px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+        .letter {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 5px;
+            font-size: 1.5em;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: lightgreen;
+        }
+        .wrongplace {
+            background-color: tomato;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+        .bonus {
+            font-size: 2em;
+            color: darkgreen;
+            font-weight: bold;
+        }
+        .hint {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Equipe1</h1>
+    <p>Devinez le mot de 9 lettres</p>
+    <div id="inputArea"><input type="text" maxlength="1" class="letterInput" id="letter0" oninput="moveFocus(0)">
+<input type="text" maxlength="1" class="letterInput" id="letter1" oninput="moveFocus(1)">
+<input type="text" maxlength="1" class="letterInput" id="letter2" oninput="moveFocus(2)">
+<input type="text" maxlength="1" class="letterInput" id="letter3" oninput="moveFocus(3)">
+<input type="text" maxlength="1" class="letterInput" id="letter4" oninput="moveFocus(4)">
+<input type="text" maxlength="1" class="letterInput" id="letter5" oninput="moveFocus(5)">
+<input type="text" maxlength="1" class="letterInput" id="letter6" oninput="moveFocus(6)">
+<input type="text" maxlength="1" class="letterInput" id="letter7" oninput="moveFocus(7)">
+<input type="text" maxlength="1" class="letterInput" id="letter8" oninput="moveFocus(8)"></div>
+    <button onclick="checkWord()">Valider</button>
+    <div id="feedback"></div>
+    <div class="result" id="result"></div>
+    <div class="hint" id="hint"></div>
+
+    <script>
+        const correctWord = "LONGITUDE";
+
+        function moveFocus(index) {
+            const current = document.getElementById("letter" + index);
+            if (current.value && index < 8) {
+                document.getElementById("letter" + (index + 1)).focus();
+            }
+        }
+
+        function checkWord() {
+            let guess = "";
+            for (let i = 0; i < 9; i++) {
+                guess += document.getElementById("letter" + i).value.toUpperCase();
+            }
+
+            const feedback = document.getElementById("feedback");
+            const result = document.getElementById("result");
+            const hint = document.getElementById("hint");
+            feedback.innerHTML = "";
+
+            if (guess.length !== correctWord.length) {
+                result.textContent = "Le mot doit contenir 9 lettres.";
+                return;
+            }
+
+            let used = Array(correctWord.length).fill(false);
+            let guessUsed = Array(correctWord.length).fill(false);
+
+            let html = "";
+            for (let i = 0; i < correctWord.length; i++) {
+                if (guess[i] === correctWord[i]) {
+                    html += `<span class='letter correct'>${guess[i]}</span>`;
+                    used[i] = true;
+                    guessUsed[i] = true;
+                } else {
+                    html += "<span class='letter' id='l" + i + "'>" + guess[i] + "</span>";
+                }
+            }
+
+            feedback.innerHTML = html;
+
+            for (let i = 0; i < correctWord.length; i++) {
+                if (!guessUsed[i]) {
+                    for (let j = 0; j < correctWord.length; j++) {
+                        if (!used[j] && guess[i] === correctWord[j]) {
+                            document.getElementById("l" + i).className = "letter wrongplace";
+                            used[j] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (guess === correctWord) {
+                result.innerHTML = "🎉 Bravo ! Lettres à retenir : <span class='bonus'>A P F</span>";
+                hint.textContent = "Ces lettres pourraient bien vous être utiles… à condition de ne pas rester seuls ! 🤫";
+            } else {
+                result.textContent = "";
+                hint.textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>
