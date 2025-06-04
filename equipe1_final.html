@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equipe 1 - Mot mystère</title>
     <style>
         body {
@@ -13,13 +12,26 @@
             padding-top: 50px;
             background: #f0f0f0;
         }
-        .letterInput {
-            font-size: 1.5em;
-            width: 40px;
-            height: 40px;
-            text-align: center;
-            margin: 2px;
-        }
+		#inputArea {
+		  display: flex;
+		  flex-wrap: nowrap;
+		  justify-content: center;
+		  overflow-x: auto;
+		  gap: 4px;
+		  margin-bottom: 10px;
+		  max-width: 90vw;
+		}
+
+		.letterInput {
+		  font-size: 1.5em;
+		  width: 5vw;
+		  max-width: 30px;
+		  height: 5vw;
+		  max-height: 50px;
+		  text-align: center;
+		  border-radius: 5px;
+		  border: 1px solid #ccc;
+		}
         button {
             margin-top: 20px;
             padding: 10px 20px;
