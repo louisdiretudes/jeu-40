@@ -160,57 +160,64 @@
       }
     }
 
-    function checkWord() {
-      let guess = "";
-      for (let i = 0; i < 8; i++) {
+function checkWord() {
+    let guess = "";
+    for (let i = 0; i < 8; i++) {
         guess += document.getElementById("letter" + i).value.toUpperCase();
-      }
+    }
 
-      const feedback = document.getElementById("feedback");
-      const result = document.getElementById("result");
-      const hint = document.getElementById("hint");
-      feedback.innerHTML = "";
+    const feedback = document.getElementById("feedback");
+    const result = document.getElementById("result");
+    const hint = document.getElementById("hint");
+    feedback.innerHTML = "";
 
-      if (guess.length !== correctWord.length) {
+    if (guess.length !== correctWord.length) {
         result.textContent = "Le mot doit contenir 8 lettres.";
         return;
-      }
+    }
 
-      let used = Array(correctWord.length).fill(false);
-      let guessUsed = Array(correctWord.length).fill(false);
+    let used = Array(correctWord.length).fill(false);
+    let guessUsed = Array(correctWord.length).fill(false);
+    let feedbackHtml = Array(correctWord.length).fill("");
 
-      let html = "";
-      for (let i = 0; i < correctWord.length; i++) {
+    // Première passe : lettres bien placées
+    for (let i = 0; i < correctWord.length; i++) {
         if (guess[i] === correctWord[i]) {
-          html += `<span class='letter correct'>${guess[i]}</span>`;
-          used[i] = true;
-          guessUsed[i] = true;
-        } else {
-          html += "<span class='letter' id='l" + i + "'>" + guess[i] + "</span>";
+            feedbackHtml[i] = `<span class="letter correct">${guess[i]}</span>`;
+            used[i] = true;
+            guessUsed[i] = true;
         }
-      }
+    }
 
-      feedback.innerHTML = html;
-
-      for (let i = 0; i < correctWord.length; i++) {
+    // Deuxième passe : lettres mal placées
+    for (let i = 0; i < correctWord.length; i++) {
         if (!guessUsed[i]) {
-          for (let j = 0; j < correctWord.length; j++) {
-            if (!used[j] && guess[i] === correctWord[j]) {
-              document.getElementById("l" + i).className = "letter wrongplace";
-              used[j] = true;
-              break;
+            let found = false;
+            for (let j = 0; j < correctWord.length; j++) {
+                if (!used[j] && guess[i] === correctWord[j]) {
+                    found = true;
+                    used[j] = true;
+                    break;
+                }
             }
-          }
+            if (found) {
+                feedbackHtml[i] = `<span class="letter wrongplace">${guess[i]}</span>`;
+            } else {
+                feedbackHtml[i] = `<span class="letter">${guess[i]}</span>`;
+            }
         }
-      }
+    }
 
-      if (guess === correctWord) {
+    feedback.innerHTML = feedbackHtml.join("");
+
+    if (guess === correctWord) {
         result.innerHTML = "🎉 Bravo ! C’est l’heure de l’<strong>APÉRITIF</strong> ! 🥳🍹🍕";
-      } else {
+    } else {
         result.innerHTML = "❌ Oups ! Ce n’est pas le bon mot... 🤔🥴";
         hint.textContent = "";
-      }
     }
+}
+
 
     function resetFields() {
       for (let i = 0; i < 8; i++) {
