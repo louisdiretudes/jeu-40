@@ -55,28 +55,54 @@
             font-style: italic;
             color: #555;
         }
+        .info {
+            margin-top: 30px;
+            font-style: italic;
+            color: #444;
+            font-size: 1em;
+            max-width: 400px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <h1>Equipe2</h1>
     <p>Devinez le mot de 10 lettres</p>
-    <div id="inputArea"><input type="text" maxlength="1" class="letterInput" id="letter0" oninput="moveFocus(0)">
-<input type="text" maxlength="1" class="letterInput" id="letter1" oninput="moveFocus(1)">
-<input type="text" maxlength="1" class="letterInput" id="letter2" oninput="moveFocus(2)">
-<input type="text" maxlength="1" class="letterInput" id="letter3" oninput="moveFocus(3)">
-<input type="text" maxlength="1" class="letterInput" id="letter4" oninput="moveFocus(4)">
-<input type="text" maxlength="1" class="letterInput" id="letter5" oninput="moveFocus(5)">
-<input type="text" maxlength="1" class="letterInput" id="letter6" oninput="moveFocus(6)">
-<input type="text" maxlength="1" class="letterInput" id="letter7" oninput="moveFocus(7)">
-<input type="text" maxlength="1" class="letterInput" id="letter8" oninput="moveFocus(8)">
-<input type="text" maxlength="1" class="letterInput" id="letter9" oninput="moveFocus(9)"></div>
+    <div id="inputArea">
+        <input type="text" maxlength="1" class="letterInput" id="letter0">
+        <input type="text" maxlength="1" class="letterInput" id="letter1">
+        <input type="text" maxlength="1" class="letterInput" id="letter2">
+        <input type="text" maxlength="1" class="letterInput" id="letter3">
+        <input type="text" maxlength="1" class="letterInput" id="letter4">
+        <input type="text" maxlength="1" class="letterInput" id="letter5">
+        <input type="text" maxlength="1" class="letterInput" id="letter6">
+        <input type="text" maxlength="1" class="letterInput" id="letter7">
+        <input type="text" maxlength="1" class="letterInput" id="letter8">
+        <input type="text" maxlength="1" class="letterInput" id="letter9">
+    </div>
     <button onclick="checkWord()">Valider</button>
+    <button onclick="resetFields()">Recommencer</button>
+
     <div id="feedback"></div>
     <div class="result" id="result"></div>
     <div class="hint" id="hint"></div>
+    <div class="info">
+        🔍 Astuce : soyez bien attentifs aux données qui se sont mises à jour sur la carte de l’application... elles pourraient vous aider à aller plus loin ! 😉
+    </div>
 
     <script>
         const correctWord = "DECOUVERTE";
+
+        // Initialisation du focus automatique
+        for (let i = 0; i < 10; i++) {
+            const input = document.getElementById("letter" + i);
+            input.addEventListener("input", () => moveFocus(i));
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Backspace" && input.value === "" && i > 0) {
+                    document.getElementById("letter" + (i - 1)).focus();
+                }
+            });
+        }
 
         function moveFocus(index) {
             const current = document.getElementById("letter" + index);
@@ -136,6 +162,17 @@
                 result.textContent = "";
                 hint.textContent = "";
             }
+        }
+
+        function resetFields() {
+            for (let i = 0; i < 10; i++) {
+                const input = document.getElementById("letter" + i);
+                input.value = "";
+            }
+            document.getElementById("letter0").focus();
+            document.getElementById("feedback").innerHTML = "";
+            document.getElementById("result").textContent = "";
+            document.getElementById("hint").textContent = "";
         }
     </script>
 </body>
