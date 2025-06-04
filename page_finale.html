@@ -1,77 +1,227 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Mot Final</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f8ff;
-            padding-top: 50px;
-        }
-        h1 {
-            font-size: 2.5em;
-            color: #2c3e50;
-        }
-        .letter-box {
-            width: 50px;
-            height: 50px;
-            font-size: 2em;
-            margin: 5px;
-            text-align: center;
-            display: inline-block;
-            border: 2px solid #2c3e50;
-            border-radius: 5px;
-        }
-        #result {
-            margin-top: 30px;
-            font-size: 2em;
-        }
-        .emoji {
-            font-size: 3em;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mot final</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5vh 5vw;
+      background: #f0f0f0;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 1.4em;
+      text-align: center;
+      margin-bottom: 2vh;
+    }
+
+    #inputArea {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+
+    .letterInput {
+      font-size: 1.5em;
+      width: 10vw;
+      max-width: 50px;
+      height: 10vw;
+      max-height: 50px;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .letter {
+      display: inline-block;
+      width: 10vw;
+      max-width: 50px;
+      height: 10vw;
+      max-height: 50px;
+      line-height: 10vw;
+      text-align: center;
+      margin: 5px;
+      font-size: 1.5em;
+      border-radius: 5px;
+      background-color: #ddd;
+    }
+
+    .correct {
+      background-color: lightgreen;
+    }
+
+    .wrongplace {
+      background-color: tomato;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.4em;
+      text-align: center;
+    }
+
+    .bonus {
+      font-size: 2em;
+      color: darkgreen;
+      font-weight: bold;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-style: italic;
+      color: #555;
+    }
+
+    .info {
+      margin-top: 30px;
+      font-style: italic;
+      color: #444;
+      font-size: 1em;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    @media (max-width: 400px) {
+      .letterInput, .letter {
+        width: 12vw;
+        height: 12vw;
+        font-size: 1.2em;
+      }
+
+      h1 {
+        font-size: 1.2em;
+      }
+
+      .result {
+        font-size: 1.2em;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Complétez le mot mystère à l’aide des lettres récoltées</h1>
-    <form id="finalForm">
-<input type="text" maxlength="1" class="letter-box" id="letter0" required>
-<input type="text" maxlength="1" class="letter-box" id="letter1" required>
-<input type="text" maxlength="1" class="letter-box" id="letter2" required>
-<input type="text" maxlength="1" class="letter-box" id="letter3" required>
-<input type="text" maxlength="1" class="letter-box" id="letter4" required>
-<input type="text" maxlength="1" class="letter-box" id="letter5" required>
-<input type="text" maxlength="1" class="letter-box" id="letter6" required>
-<input type="text" maxlength="1" class="letter-box" id="letter7" required>
+  <h1>Complétez le mot mystère à l’aide des lettres récoltées</h1>
+  <div id="inputArea">
+    <input type="text" maxlength="1" class="letterInput" id="letter0">
+    <input type="text" maxlength="1" class="letterInput" id="letter1">
+    <input type="text" maxlength="1" class="letterInput" id="letter2">
+    <input type="text" maxlength="1" class="letterInput" id="letter3">
+    <input type="text" maxlength="1" class="letterInput" id="letter4">
+    <input type="text" maxlength="1" class="letterInput" id="letter5">
+    <input type="text" maxlength="1" class="letterInput" id="letter6">
+    <input type="text" maxlength="1" class="letterInput" id="letter7">
+  </div>
+  <button onclick="checkWord()">Valider</button>
+  <button onclick="resetFields()">Recommencer</button>
 
-        <br><br>
-        <button type="submit">Valider</button>
-    </form>
-    <div id="result"></div>
+  <div id="feedback"></div>
+  <div class="result" id="result"></div>
+  <div class="hint" id="hint"></div>
 
-    <script>
-        const form = document.getElementById('finalForm');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            let inputWord = '';
-            inputWord += document.getElementById('letter0').value.toUpperCase();
-            inputWord += document.getElementById('letter1').value.toUpperCase();
-            inputWord += document.getElementById('letter2').value.toUpperCase();
-            inputWord += document.getElementById('letter3').value.toUpperCase();
-            inputWord += document.getElementById('letter4').value.toUpperCase();
-            inputWord += document.getElementById('letter5').value.toUpperCase();
-            inputWord += document.getElementById('letter6').value.toUpperCase();
-            inputWord += document.getElementById('letter7').value.toUpperCase();
+  <script>
+    const correctWord = "APERITIF";
 
-            const result = document.getElementById('result');
-            if (inputWord === 'APERITIF') {
-                result.innerHTML = "🎉 Bravo ! C’est l’heure de l’<strong>APÉRITIF</strong> ! 🥳🍹🍕";
-            } else {
-                result.innerHTML = "❌ Oups ! Ce n’est pas le bon mot... 🤔🥴";
+    for (let i = 0; i < 8; i++) {
+      const input = document.getElementById("letter" + i);
+      input.addEventListener("input", () => moveFocus(i));
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Backspace" && input.value === "" && i > 0) {
+          document.getElementById("letter" + (i - 1)).focus();
+        }
+      });
+    }
+
+    function moveFocus(index) {
+      const current = document.getElementById("letter" + index);
+      if (current.value && index < 7) {
+        document.getElementById("letter" + (index + 1)).focus();
+      }
+    }
+
+    function checkWord() {
+      let guess = "";
+      for (let i = 0; i < 8; i++) {
+        guess += document.getElementById("letter" + i).value.toUpperCase();
+      }
+
+      const feedback = document.getElementById("feedback");
+      const result = document.getElementById("result");
+      const hint = document.getElementById("hint");
+      feedback.innerHTML = "";
+
+      if (guess.length !== correctWord.length) {
+        result.textContent = "Le mot doit contenir 8 lettres.";
+        return;
+      }
+
+      let used = Array(correctWord.length).fill(false);
+      let guessUsed = Array(correctWord.length).fill(false);
+
+      let html = "";
+      for (let i = 0; i < correctWord.length; i++) {
+        if (guess[i] === correctWord[i]) {
+          html += `<span class='letter correct'>${guess[i]}</span>`;
+          used[i] = true;
+          guessUsed[i] = true;
+        } else {
+          html += "<span class='letter' id='l" + i + "'>" + guess[i] + "</span>";
+        }
+      }
+
+      feedback.innerHTML = html;
+
+      for (let i = 0; i < correctWord.length; i++) {
+        if (!guessUsed[i]) {
+          for (let j = 0; j < correctWord.length; j++) {
+            if (!used[j] && guess[i] === correctWord[j]) {
+              document.getElementById("l" + i).className = "letter wrongplace";
+              used[j] = true;
+              break;
             }
-        });
-    </script>
+          }
+        }
+      }
+
+      if (guess === correctWord) {
+        result.innerHTML = "🎉 Bravo ! C’est l’heure de l’<strong>APÉRITIF</strong> ! 🥳🍹🍕";
+      } else {
+        result.innerHTML = "❌ Oups ! Ce n’est pas le bon mot... 🤔🥴";
+        hint.textContent = "";
+      }
+    }
+
+    function resetFields() {
+      for (let i = 0; i < 8; i++) {
+        const input = document.getElementById("letter" + i);
+        input.value = "";
+      }
+      document.getElementById("letter0").focus();
+      document.getElementById("feedback").innerHTML = "";
+      document.getElementById("result").textContent = "";
+      document.getElementById("hint").textContent = "";
+    }
+  </script>
 </body>
 </html>
